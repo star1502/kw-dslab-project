@@ -4,15 +4,18 @@
 #include <stdlib.h>
 #include <time.h>
 
-unsigned long whatNum_getNum(unsigned int level) {
+// Returns the number to be remembered
+unsigned long getNum(unsigned int level) {
     srand(time(NULL));
     unsigned long retVal = rand() * rand(); // This variable will be returned
-    retVal /= numOfDigits(level);
+    retVal = retVal % numOfDigits(level);
     return retVal;
 }
 
+// Returns the number of digits
+// Max digit : 10
 unsigned long numOfDigits(unsigned int level) {
-    if (level > 13)
-        level = 12;
+    if (level > 11)
+        level = 10;
     return (unsigned long)pow(10, level);
 }
