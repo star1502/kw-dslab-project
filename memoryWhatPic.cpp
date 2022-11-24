@@ -1,29 +1,22 @@
-#include "memoryWhatPic.h"
+#include "memoryWhatPic.hpp"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <vector>
 
-char **whatPic_makePic(unsigned int level) {
-    // Get size of width, height
-    unsigned short sizeOfRowCol = whatPic_getsizeOfRowCol(level);
-    // bool type 2D array - it will be used max 6*6
-    char picture[6][6] = {
-        '0',
-    };
+using namespace std;
 
-    // determine the num of colored square
-    unsigned short numOfFilled;
-    srand(time(NULL));
-    numOfFilled = rand() % (sizeOfRowCol * (sizeOfRowCol - 1));
-
-    for (int i = 0; i < sizeOfRowCol; i++) {
-        for (int j = 0; i < sizeOfRowCol; i++) {
-        }
-    }
+// constructor
+PicToBeMemoried::PicToBeMemoried(unsigned int level) {
+    sizeOfMatrix = deterSizeOfMatrix(level);
+    numOfFilled = deterNumOfFilled();
+    matrix.resize(sizeOfMatrix);
+    makeMatrix();
 }
 
-unsigned short whatPic_getsizeOfRowCol(unsigned int level) {
+// Determine size of width, height
+unsigned short PicToBeMemoried::deterSizeOfMatrix(unsigned int level) {
     switch (level) {
     case 1:
     case 2:
@@ -41,5 +34,21 @@ unsigned short whatPic_getsizeOfRowCol(unsigned int level) {
     default:
         return 6;
         break;
+    }
+}
+
+// determine the num of colored square
+unsigned short PicToBeMemoried::deterNumOfFilled(void) {
+    srand(time(NULL));
+    return rand() % (sizeOfMatrix * (sizeOfMatrix - 1));
+}
+
+void PicToBeMemoried::makeMatrix(void) {
+    // Initialzed to same as :
+    // bool temp[numOfFilled][numOfFilled]={false, }
+    vector<vector<bool>> temp(numOfFilled, vector<bool>(numOfFilled, false));
+
+    unsigned short temp = numOfFilled;
+    while (numOfFilled > 0) {
     }
 }

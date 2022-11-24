@@ -1,6 +1,14 @@
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
+class PicToBeMemoried {
+  public:
+    PicToBeMemoried(unsigned int level);
+    std::vector<std::vector<bool>> getAnswer(void) { return matrix; };
 
-char **whatPic_makePic(unsigned int level);
-unsigned short whatPic_getsizeOfRowCol(unsigned int level);
+  private:
+    unsigned short deterSizeOfMatrix(unsigned int level);
+    unsigned short deterNumOfFilled(void);
+    void makeMatrix(void);
+
+    unsigned short sizeOfMatrix;
+    unsigned short nunOfFilled;
+    std::vector<std::vector<bool>> matrix;
+};

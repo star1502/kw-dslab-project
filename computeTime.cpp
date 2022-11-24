@@ -1,47 +1,45 @@
-#include "computeTime.h"
-#include <stdio.h>
+#include "computeTime.hpp"
+#include <iostream>
 #include <stdlib.h>
 #include <time.h>
 
-typedef struct formula {
-    unsigned long operand1;
-    unsigned long operand2;
-    char operator;
-};
-
-// Determine the FORMULA : ADD/SUB/MUL
-struct formula computeWhat(unsigned int level) {
-    struct formula retForm;
-
-    retForm.operator= deterOperation();
-    retForm.operand1 = deterOperand(level, retForm.operator);
-    retForm.operand2 = deterOperand(level, retForm.operator);
-
-    return retForm;
+// Default constructor : Determine the FORMULA - ADD/SUB/MUL
+ToBeComputed::ToBeComputed(unsigned int level) {
+    operation = deterOperation();
+    operand1 = deterOperand(level);
+    operand2 = deterOperand(level);
+    answer = computeAnswer();
 }
 
-// Determine the type of OPERATION : ADD/SUB/MUL
-char deterOperation(void) {
-    srand(time(NULL));
-    int temp = rand() % 3;
-    switch (temp) {
-    case 0:
+// Return Operator in '+' or '-' or '*'
+unsigned long ToBeComputed::computeAnswer(void) {
+    switch (operation) {
+    case 0: //+
         return '+';
-    case 1:
+    case 1: //-
         return '-';
-    case 2:
+    case 2: //*
         return '*';
     default:
         break;
     }
 }
 
+// Determine the type of OPERATION : ADD/SUB/MUL
+char ToBeComputed::deterOperation(void) {
+    srand(time(NULL));
+    return (rand() % 3);
+    // 0-> ADD
+    // 1-> SUB
+    // 2-> MUL
+}
+
 // Determine the OPERAND - level and the type of operator will be considered
-unsigned long deterOperand(unsigned int level, char operatorType) {
+unsigned long ToBeComputed::deterOperand(unsigned int level) {
     srand(time(NULL));
     unsigned long retVal = rand() * rand(); // This variable will be returned
 
-    switch (operatorType) {
+    switch (operation) {
     case '+':
     case '-':
         if (level < 5)
@@ -56,11 +54,24 @@ unsigned long deterOperand(unsigned int level, char operatorType) {
         if (level < 8)
             retVal = retVal % 10;
         else
-            retVal = 1 + retVal % 14;
+            retVal = 1 + retVal % 12;
         return retVal;
         break;
     default:
         return 5;
+        break;
+    }
+}
+
+unsigned long ToBeComputed::computeAnswer(void) {
+    switch (operation) {
+    case 0: //+
+        return (operand1 + operand2);
+    case 1: //-
+        return (operand1 - operand2);
+    case 2: //*
+        return (operand1 * operand2);
+    default:
         break;
     }
 }

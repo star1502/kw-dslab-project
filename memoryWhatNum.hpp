@@ -1,4 +1,3 @@
-
 // Returns the number to be remembered
 unsigned long getNum(unsigned int level);
 

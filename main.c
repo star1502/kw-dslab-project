@@ -1,61 +1,26 @@
 #include <ncurses.h>
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-#include "computeTime.h"
-#include "memoryWhatNum.h"
-#include "memoryWhatPic.h"
-#include "myVector.h"
-#include "responseTime.h"
+#include "computeTime.hpp"
+#include "memoryWhatNum.hpp"
+#include "memoryWhatPic.hpp"
+#include "responseTime.hpp"
 
-int main(void) {
-    WINDOW *window1;
-    WINDOW *window2;
+using namespace std;
 
-    initscr();
-
-    if (has_colors() == FALSE) {
-        puts("Terminal does not support colors!\n");
-        endwin();
-        return 1;
-    } else {
-        start_color();
-        init_pair(1, COLOR_BLUE, COLOR_WHITE);
-        init_pair(2, COLOR_WHITE, COLOR_BLUE);
-    }
-
-    refresh;
-
-    window1 = newwin(18, 80, 0, 0);
-    window2 = newwin(6, 80, 18, 0);
-
-    wbkgd(window1, COLOR_PAIR(1));
-    wbkgd(window2, COLOR_PAIR(2));
-
-    wprintw(window1, "hello");
-    wprintw(window2, "5424242542452");
-
-    wrefresh(window1);
-    wrefresh(window2);
-
-    getch();
-
-    endwin();
-
-    return 0;
-}
-
-/*
-void mySigHandler(int signum) {
-}
+void mySigHandler(int signum) { exit(0); }
 
 int main(void) {
     // Redefine SIGINT handler
     if (signal(SIGINT, mySigHandler) == SIG_ERR) {
-        perror("signal() error!");
+        perror("FAILED to Redefine SIGINT handler");
+    }
+
+    while (1) {
     }
 
     return 0;
 }
-*/
