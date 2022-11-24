@@ -1,5 +1,4 @@
 #include "memoryWhatPic.hpp"
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -7,7 +6,7 @@
 
 using namespace std;
 
-// constructor
+// Default constructor
 PicToBeMemoried::PicToBeMemoried(unsigned int level) {
     sizeOfMatrix = deterSizeOfMatrix(level);
     numOfFilled = deterNumOfFilled();
@@ -39,10 +38,12 @@ unsigned short PicToBeMemoried::deterSizeOfMatrix(unsigned int level) {
 
 // determine the num of colored square
 unsigned short PicToBeMemoried::deterNumOfFilled(void) {
+    unsigned short power2 = sizeOfMatrix * sizeOfMatrix;
     srand(time(NULL));
-    return rand() % (sizeOfMatrix * (sizeOfMatrix - 1));
+    return (rand() % (power2 / 2)) + power2 / 4;
 }
 
+// Make pictures will be Printed based on value [numOfFilled]
 void PicToBeMemoried::makeMatrix(void) {
     // Initialzed to same as :
     // bool temp[numOfFilled][numOfFilled]={false, }
