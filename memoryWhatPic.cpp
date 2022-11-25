@@ -10,7 +10,7 @@ using namespace std;
 PicToBeMemoried::PicToBeMemoried(unsigned int level) {
     sizeOfMatrix = deterSizeOfMatrix(level);
     numOfFilled = deterNumOfFilled();
-    matrix.resize(sizeOfMatrix);
+    initMatrix();
     makeMatrix();
 }
 
@@ -43,13 +43,37 @@ unsigned short PicToBeMemoried::deterNumOfFilled(void) {
     return (rand() % (power2 / 2)) + power2 / 4;
 }
 
+// Initialize Matrix
+void PicToBeMemoried::initMatrix(void) {
+    //
+    matrix.resize(sizeOfMatrix);
+
+    // vector to be pushed to Matrix
+    // same as bool v1={false, }
+    std::vector<bool> v1(sizeOfMatrix, false);
+
+    // Initialzed to same as :
+    // bool matrix[numOfFilled][numOfFilled]={false, }
+    for (int i = 0; i < sizeOfMatrix; i++) {
+        matrix.push_back(v1);
+    }
+}
+
 // Make pictures will be Printed based on value [numOfFilled]
 void PicToBeMemoried::makeMatrix(void) {
-    // Initialzed to same as :
-    // bool temp[numOfFilled][numOfFilled]={false, }
-    vector<vector<bool>> temp(numOfFilled, vector<bool>(numOfFilled, false));
-
     unsigned short temp = numOfFilled;
-    while (numOfFilled > 0) {
+
+    // Fill in the blanks as many as numOfFilled value
+    // false -> BLANK square
+    // true -> FILLED square
+    while (temp > 0) {
+        for (int i = 0; i < sizeOfMatrix; i++) {
+            for (int j = 0; j < sizeOfMatrix; j++) {
+                if (matrix[i][j] == false) {
+                    matrix[i][j] = true;
+                    temp--;
+                }
+            }
+        }
     }
 }

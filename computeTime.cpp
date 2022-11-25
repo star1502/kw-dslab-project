@@ -12,7 +12,7 @@ ToBeComputed::ToBeComputed(unsigned int level) {
 }
 
 // Return Operator in '+' or '-' or '*'
-unsigned long ToBeComputed::computeAnswer(void) {
+char ToBeComputed::getOperation(void) {
     switch (operation) {
     case 0: //+
         return '+';
@@ -23,6 +23,14 @@ unsigned long ToBeComputed::computeAnswer(void) {
     default:
         break;
     }
+}
+
+// Return calculation Formula in string type
+std::string ToBeComputed::getFormula(void) {
+    std::string retVal;
+    retVal = std::to_string(operand1) + std::to_string(getOperation()) +
+             std::to_string(operand2);
+    return retVal;
 }
 
 // Determine the type of OPERATION : ADD/SUB/MUL
