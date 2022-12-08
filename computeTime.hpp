@@ -1,7 +1,11 @@
+#include <string>
+
 class ToBeComputed {
   public:
+    ToBeComputed(void);
+
     // Default constructor : Determine the FORMULA - ADD/SUB/MUL
-    ToBeComputed(unsigned int level);
+    void myinit(unsigned int level);
     unsigned long getOperand1(void) { return operand1; }
     unsigned long getOperand2(void) { return operand2; }
     char getOperation(void);
@@ -10,13 +14,13 @@ class ToBeComputed {
 
   private:
     char deterOperation(void); // Determine the type of OPERATION : ADD/SUB/MUL
-    unsigned long
-    deterOperand(unsigned int level); // Determine the OPERAND - level and the
+    unsigned long deterOperand(void); // Determine the OPERAND - level and the
                                       // type of operator will be considered
-    unsigned long computeAnswer();
+    long computeAnswer(void);
 
     unsigned long operand1;
     unsigned long operand2;
     char operation;
-    unsigned long answer;
+    long answer;
+    unsigned int level;
 };

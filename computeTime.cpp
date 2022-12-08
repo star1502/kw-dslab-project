@@ -1,13 +1,18 @@
 #include "computeTime.hpp"
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include <stdlib.h>
-#include <time.h>
 
 // Default constructor : Determine the FORMULA - ADD/SUB/MUL
-ToBeComputed::ToBeComputed(unsigned int level) {
+ToBeComputed::ToBeComputed(void) {}
+
+// Default constructor : Determine the FORMULA - ADD/SUB/MUL
+void ToBeComputed::myinit(unsigned int level) {
+    this->level = level;
     operation = deterOperation();
-    operand1 = deterOperand(level);
-    operand2 = deterOperand(level);
+    operand1 = deterOperand();
+    operand2 = deterOperand();
     answer = computeAnswer();
 }
 
@@ -28,14 +33,14 @@ char ToBeComputed::getOperation(void) {
 // Return calculation Formula in string type
 std::string ToBeComputed::getFormula(void) {
     std::string retVal;
-    retVal = std::to_string(operand1) + std::to_string(getOperation()) +
-             std::to_string(operand2);
+    retVal =
+        std::to_string(operand1) + getOperation() + std::to_string(operand2);
     return retVal;
 }
 
 // Determine the type of OPERATION : ADD/SUB/MUL
 char ToBeComputed::deterOperation(void) {
-    srand(time(NULL));
+    // srand(time(NULL));
     return (rand() % 3);
     // 0-> ADD
     // 1-> SUB
@@ -43,36 +48,37 @@ char ToBeComputed::deterOperation(void) {
 }
 
 // Determine the OPERAND - level and the type of operator will be considered
-unsigned long ToBeComputed::deterOperand(unsigned int level) {
-    srand(time(NULL));
-    unsigned long retVal = rand() * rand(); // This variable will be returned
+unsigned long ToBeComputed::deterOperand(void) {
+    int garbage;
+    // srand(time(NULL));
+    unsigned long retVal = rand(); // This variable will be returned
 
-    switch (operation) {
-    case '+':
-    case '-':
-        if (level < 5)
+    switch (this->operation) {
+    case 0: //+
+    case 1: //-
+        if (this->level < 5)
             retVal = 1 + retVal % 9;
-        else if (level < 11)
+        else if (this->level < 11)
             retVal = 1 + retVal % 30;
         else
             retVal = 1 + retVal % 100;
         return retVal;
         break;
-    case '*':
-        if (level < 8)
+    case 2: //*
+        if (this->level < 8)
             retVal = retVal % 10;
         else
             retVal = 1 + retVal % 12;
         return retVal;
         break;
     default:
-        return 5;
+        return 999;
         break;
     }
 }
 
-unsigned long ToBeComputed::computeAnswer(void) {
-    switch (operation) {
+long ToBeComputed::computeAnswer(void) {
+    switch (this->operation) {
     case 0: //+
         return (operand1 + operand2);
     case 1: //-
