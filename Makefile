@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-g 
 LDLIBS=-lncurses
 TARGET=dslab-project.out
-OBJS=main.o ctime.o whatnum.o whatpic.o restime.o
+OBJS=main.o ctime.o whatnum.o whatpic.o restime.o frontEnd.o
 
 $(TARGET): $(OBJS)
 	$(CC) -o $@ $(OBJS) -lncurses -lm -std=c++14
@@ -19,5 +19,7 @@ whatpic.o : memoryWhatPic.cpp
 restime.o : responseTime.cpp
 	$(CC) -c -o restime.o responseTime.cpp
 
+frontEnd.o : frontEnd.cpp
+	$(CC) -c -o frontEnd.o frontEnd.cpp
 clean:
 	rm $(OBJECT) $(TARGET)
