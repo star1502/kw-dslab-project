@@ -1,9 +1,11 @@
 #include <vector>
+/*
 class PicToBeMemoried {
   public:
-    PicToBeMemoried(unsigned int level);
+    PicToBeMemoried(void);
+    void init(unsigned int level);
     unsigned short getSizeOfMatrix(void) { return sizeOfMatrix; }
-    std::vector<std::vector<bool>> getAnswer(void) { return matrix; };
+    std::vector<bool> getAnswer(void) { return matrix; };
 
   private:
     // Determine size of width, height
@@ -17,7 +19,9 @@ class PicToBeMemoried {
 
     unsigned short sizeOfMatrix;
     unsigned short numOfFilled;
-    std::vector<std::vector<bool>> matrix;
+    std::vector<bool> matrix;
 };
+*/
 
-std::vector<std::vector<bool>> getOptionMatrix(void);
+unsigned short getSizeOfMatrix(unsigned int level);
+std::vector<bool> getOption(unsigned int level);

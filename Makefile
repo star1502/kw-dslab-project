@@ -5,7 +5,7 @@ TARGET=dslab-project.out
 OBJS=main.o ctime.o whatnum.o whatpic.o restime.o frontEnd.o
 
 $(TARGET): $(OBJS)
-	$(CC) -o $@ $(OBJS) -lncurses -lm -std=c++14
+	$(CC) -O0 -o $@ $(OBJS) -lncurses -lm -std=c++14
 
 ctime.o : computeTime.cpp
 	$(CC) -c -o ctime.o computeTime.cpp

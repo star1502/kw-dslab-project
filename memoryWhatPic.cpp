@@ -5,9 +5,11 @@
 #include <vector>
 
 using namespace std;
-
+/*
 // Default constructor
-PicToBeMemoried::PicToBeMemoried(unsigned int level) {
+PicToBeMemoried::PicToBeMemoried(void) {}
+
+void PicToBeMemoried::init(unsigned int level) {
     sizeOfMatrix = deterSizeOfMatrix(level);
     numOfFilled = deterNumOfFilled();
     initMatrix();
@@ -39,23 +41,18 @@ unsigned short PicToBeMemoried::deterSizeOfMatrix(unsigned int level) {
 // determine the num of colored square
 unsigned short PicToBeMemoried::deterNumOfFilled(void) {
     unsigned short power2 = sizeOfMatrix * sizeOfMatrix;
-    srand(time(NULL));
+    // srand(time(NULL));
     return (rand() % (power2 / 2)) + power2 / 4;
 }
 
 // Initialize Matrix
 void PicToBeMemoried::initMatrix(void) {
-    //
-    matrix.resize(sizeOfMatrix);
-
-    // vector to be pushed to Matrix
-    // same as bool v1={false, }
-    std::vector<bool> v1(sizeOfMatrix, false);
+    matrix.resize(sizeOfMatrix * sizeOfMatrix);
 
     // Initialzed to same as :
-    // bool matrix[numOfFilled][numOfFilled]={false, }
-    for (int i = 0; i < sizeOfMatrix; i++) {
-        matrix.push_back(v1);
+    // bool matrix[numOfFilled]={false, }
+    for (int i = 0; i < sizeOfMatrix * sizeOfMatrix; i++) {
+        matrix.push_back(false);
     }
 }
 
@@ -67,13 +64,85 @@ void PicToBeMemoried::makeMatrix(void) {
     // false -> BLANK square
     // true -> FILLED square
     while (temp > 0) {
-        for (int i = 0; i < sizeOfMatrix; i++) {
-            for (int j = 0; j < sizeOfMatrix; j++) {
-                if (matrix[i][j] == false) {
-                    matrix[i][j] = true;
-                    temp--;
-                }
+        for (int i = 0; i < sizeOfMatrix * sizeOfMatrix; i++) {
+            if (matrix[i] == false) {
+                matrix[i] = true;
+                temp--;
             }
         }
     }
+}
+*/
+
+unsigned short getSizeOfMatrix(unsigned int level) {
+    unsigned short sizeOfMatrix;
+
+    switch (level) {
+    case 1:
+    case 2:
+    case 3:
+        sizeOfMatrix = 3;
+        break;
+    case 4:
+    case 5:
+        sizeOfMatrix = 4;
+        break;
+    case 6:
+    case 7:
+        sizeOfMatrix = 5;
+        break;
+    default:
+        sizeOfMatrix = 6;
+        break;
+    }
+    return sizeOfMatrix;
+}
+
+std::vector<bool> getOption(unsigned int level) {
+    unsigned short sizeOfMatrix;
+    unsigned short numOfFilled;
+
+    switch (level) {
+    case 1:
+    case 2:
+    case 3:
+        sizeOfMatrix = 3;
+        break;
+    case 4:
+    case 5:
+        sizeOfMatrix = 4;
+        break;
+    case 6:
+    case 7:
+        sizeOfMatrix = 5;
+        break;
+    default:
+        sizeOfMatrix = 6;
+        break;
+    }
+    //-------------------
+
+    unsigned short power2 = sizeOfMatrix * sizeOfMatrix;
+    srand(time(NULL));
+    numOfFilled = (rand() % (power2 / 2)) + power2 / 4;
+
+    //-------------------
+
+    std::vector<bool> matrix(power2, false);
+
+    //-------------------
+    unsigned short temp = numOfFilled;
+
+    // Fill in the blanks as many as numOfFilled value
+    // false -> BLANK square
+    // true -> FILLED square
+    while (temp > 0) {
+        for (int i = 0; i < power2; i++) {
+            if (matrix[i] == false) {
+                matrix[i] = true;
+                temp--;
+            }
+        }
+    }
+    return matrix;
 }

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <ncurses.h>
 #include <signal.h>
+#include <stdio.h>
 #include <unistd.h>
 
 using namespace std;
@@ -93,7 +94,7 @@ void computeTime(void) {
     ToBeComputed *use;
     long answer, userAnswer;
     string equation;
-    clock_t timeStarted = 0, timePressed = 0;
+    time_t timeStarted = 0, timePressed = 0;
     bool isFailed;
 
     // Doing game
@@ -111,13 +112,13 @@ void computeTime(void) {
         std::cout << "Calculate " << equation << " in 3 sec" << std::endl;
         std::cout << "Your ans : ";
 
-        // COUNTDOWN
-        timeStarted = clock();
+        // COUNTDOWN Start
+        timeStarted = time(NULL);
         std::cin >> userAnswer;
 
         // CHECK : isWrong?
         if (answer == userAnswer) {
-            timePressed = clock();
+            timePressed = time(NULL);
             std::cout << "Correct!" << std::endl;
         } else {
             timePressed = clock();
@@ -126,7 +127,7 @@ void computeTime(void) {
         }
 
         // CHECK : isTimeOut?
-        if (timePressed - timeStarted > 3000) {
+        if (timePressed - timeStarted > 3) {
             std::cout << "Time Out!" << std::endl;
             isFailed = true;
         }
@@ -151,14 +152,18 @@ void computeTime_ncur(void) {
     ToBeComputed *use;
     long answer, userAnswer;
     string equation;
-    clock_t timeStarted = 0, timePressed = 0;
+    time_t timeStarted = 0, timePressed = 0;
     bool isFailed;
 
     // Initialize window
     initscr();
     WINDOW *scr_Restime_Instruct = newwin(5, 20, 3, 3);
-    WINDOW *scr_Restime_usrField = newwin(4, 20, 8, 3);
+    WINDOW *scr_Restime_usrField = newwin(3, 20, 8, 3);
     mvprintw(0, 0, "You choosed Computation Time!");
+
+    /// Display remaining life
+    mvprintw(1, 0, "L : ");
+    mvprintw(1, 4, "***");
     refresh();
 
     // Doing game
@@ -172,6 +177,11 @@ void computeTime_ncur(void) {
         refresh();
         wrefresh(scr_Restime_Instruct);
         wrefresh(scr_Restime_usrField);
+
+        // Print level
+        mvprintw(2, 0, "Level : ");
+        mvprintw(2, 8, to_string(level).c_str());
+        refresh();
 
         //  variable Initialze
         use = new ToBeComputed;
@@ -189,25 +199,24 @@ void computeTime_ncur(void) {
         wrefresh(scr_Restime_Instruct);
         wrefresh(scr_Restime_usrField);
 
-        // COUNTDOWN
-        timeStarted = clock();
+        // COUNTDOWN Start
+        timeStarted = time(NULL);
         std::cin >> userAnswer;
 
-        // CHECK : isWrong?
+        // CHECK : isCorrect?
         if (answer == userAnswer) {
-            timePressed = clock();
+            timePressed = time(NULL);
             mvwprintw(scr_Restime_Instruct, 3, 1, "Correct!");
             refresh();
             wrefresh(scr_Restime_Instruct);
             // CHECK : isTimeOut?
-            if (timePressed - timeStarted > 3000) {
+            if (timePressed - timeStarted > 3) {
                 mvwprintw(scr_Restime_Instruct, 3, 1, "Time Out!");
                 refresh();
                 wrefresh(scr_Restime_Instruct);
                 isFailed = true;
             }
         } else {
-            timePressed = clock();
             mvwprintw(scr_Restime_Instruct, 3, 1, "Wrong!");
             refresh();
             wrefresh(scr_Restime_Instruct);
@@ -218,6 +227,7 @@ void computeTime_ncur(void) {
         // if isWrong OR isTimeOut -> life--
         if (isFailed == true) {
             life--;
+            mvdelch(1, 4 + life);
             mvwprintw(scr_Restime_Instruct, 3, 1, to_string(life).c_str());
             mvwprintw(scr_Restime_Instruct, 3, 2, " ");
             mvwprintw(scr_Restime_Instruct, 3, 3, "times remaining");
@@ -237,6 +247,249 @@ void computeTime_ncur(void) {
     delwin(scr_Restime_usrField);
     endwin();
     return;
+}
+
+void memoryWhatNum_ncur(void) {
+    int life = 3; // Allow user to be wrong UP TO 3 TIMES
+    unsigned int level = 1;
+
+    // variable declare
+    ToBeComputed *use;
+    unsigned long answer, userAnswer;
+
+    // Initialize window
+    initscr();
+    WINDOW *scr_Restime_Instruct = newwin(4, 20, 3, 3);
+    WINDOW *scr_Restime_usrField = newwin(3, 20, 8, 3);
+    mvprintw(0, 0, "You choosed Memory Number!");
+    refresh();
+
+    /// Display remaining life
+    mvprintw(1, 0, "L : ");
+    mvprintw(1, 4, "***");
+
+    while (life > 0) {
+        // Window setting
+        wclear(scr_Restime_Instruct);
+        wclear(scr_Restime_usrField);
+        box(scr_Restime_Instruct, 0, 0); // added for easy viewing
+        box(scr_Restime_usrField, 0, 0); // added for easy viewing
+        refresh();
+        wrefresh(scr_Restime_Instruct);
+        wrefresh(scr_Restime_usrField);
+
+        // Print level
+        mvprintw(2, 0, "Level : ");
+        mvprintw(2, 8, to_string(level).c_str());
+        refresh();
+
+        // Ready
+        mvwprintw(scr_Restime_Instruct, 2, 1, "Press Enter");
+        wrefresh(scr_Restime_Instruct);
+
+        std::cin.ignore(); // flush input buffer
+        fflush(stdin);
+
+        // Get randomly generated num
+        answer = getNum(level);
+
+        // Print number and 3sec wait
+        mvwprintw(scr_Restime_Instruct, 1, 1, "REMEMBER:");
+        mvwprintw(scr_Restime_Instruct, 2, 1, "%lld          ", answer);
+        mvwprintw(scr_Restime_usrField, 1, 1, "");
+        wrefresh(scr_Restime_Instruct);
+        wrefresh(scr_Restime_usrField);
+        sleep(3);
+
+        // after 3sec delete num
+        mvwprintw(scr_Restime_Instruct, 2, 1, "What?:       ");
+        wrefresh(scr_Restime_Instruct);
+        mvwprintw(scr_Restime_usrField, 1, 1, ">> ");
+        wrefresh(scr_Restime_usrField);
+
+        // get input from user
+        wscanw(scr_Restime_usrField, "%llu", &userAnswer);
+
+        // CHECK : isWrong?
+        if (answer == userAnswer) {
+            mvwprintw(scr_Restime_Instruct, 2, 1, "Correct!");
+            refresh();
+            wrefresh(scr_Restime_Instruct);
+        } else {
+            mvwprintw(scr_Restime_Instruct, 2, 1, "Wrong!");
+            refresh();
+            wrefresh(scr_Restime_Instruct);
+            sleep(1);
+
+            life--;
+            mvdelch(1, 4 + life);
+            mvwprintw(scr_Restime_Instruct, 2, 1, to_string(life).c_str());
+            mvwprintw(scr_Restime_Instruct, 2, 2, " ");
+            mvwprintw(scr_Restime_Instruct, 2, 3, "times remaining");
+            wrefresh(scr_Restime_Instruct);
+        }
+        sleep(1);
+        mvwprintw(scr_Restime_usrField, 1, 1, "    ");
+        wrefresh(scr_Restime_usrField);
+
+        move(2, 0);
+        clrtoeol();
+        level++;
+    }
+
+    mvwprintw(scr_Restime_Instruct, 2, 1, "You Dead!         ");
+    wrefresh(scr_Restime_Instruct);
+    sleep(1);
+
+    erase();
+    delwin(scr_Restime_Instruct);
+    delwin(scr_Restime_usrField);
+    endwin();
+}
+void memoryWhatPic_ncur(void) {
+    int life = 3; // Allow user to be wrong UP TO 3 TIMES
+    unsigned int level = 1;
+
+    // variable declare
+    short answerIdx, userAnswer, sizeOfAnsMatrix;
+    short power2;
+    std::vector<short> ansMatrix;
+    std::vector<short> opt[4];
+
+    // Initialize window
+    initscr();
+    WINDOW *scr_Restime_Instruct = newwin(10, 55, 3, 3);
+    WINDOW *scr_Restime_usrField = newwin(3, 15, 15, 3);
+    mvprintw(0, 0, "You choosed Memory Picture!");
+    refresh();
+
+    /// Display remaining life
+    mvprintw(1, 0, "L : ");
+    mvprintw(1, 4, "***");
+
+    while (life > 0) {
+        // Window setting
+        wclear(scr_Restime_Instruct);
+        wclear(scr_Restime_usrField);
+        box(scr_Restime_Instruct, 0, 0); // added for easy viewing
+        box(scr_Restime_usrField, 0, 0); // added for easy viewing
+        refresh();
+        wrefresh(scr_Restime_Instruct);
+        wrefresh(scr_Restime_usrField);
+
+        // Print level
+        mvprintw(2, 0, "Level : ");
+        mvprintw(2, 8, to_string(level).c_str());
+        refresh();
+
+        // Matrix options Initialze
+        srand(time(NULL));
+        sizeOfAnsMatrix = getSizeOfMatrix(level);
+        power2 = sizeOfAnsMatrix * sizeOfAnsMatrix;
+        for (int i = 0; i < 4; i++)
+            opt[i].resize(0);
+
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < power2; j++)
+                opt[i].push_back(rand() % 2);
+
+        // Select 1 and that will be answer
+        answerIdx = rand() % 4;
+        ansMatrix = opt[answerIdx];
+
+        // Ready
+        mvwprintw(scr_Restime_Instruct, 1, 1, "Press Enter To Cont");
+        wrefresh(scr_Restime_Instruct);
+
+        std::cin.ignore(); // flush input buffer
+        fflush(stdin);
+
+        // Print picture to be memoried
+        // User should remember this
+        int yptr = 2;
+        int xptr = 1;
+        mvwprintw(scr_Restime_Instruct, 1, 1, "REMEMBER:                ");
+        for (int i = 0; i < power2; i++) {
+            if (i % sizeOfAnsMatrix == 0) {
+                yptr++;
+                xptr = 1;
+            }
+            mvwprintw(scr_Restime_Instruct, yptr, xptr++, "%d",
+                      ansMatrix.at(i));
+        }
+        wrefresh(scr_Restime_Instruct);
+        sleep(3);
+
+        // after 3sec delete pic
+        wclear(scr_Restime_Instruct);
+        box(scr_Restime_Instruct, 0, 0); // added for easy viewing
+        mvwprintw(scr_Restime_Instruct, 1, 1, "What? ");
+        refresh();
+        mvwprintw(scr_Restime_usrField, 1, 1, ">> ");
+        wrefresh(scr_Restime_Instruct);
+        wrefresh(scr_Restime_usrField);
+
+        // Print other options
+        yptr = 2;
+        xptr = 1;
+        int xptr_cur = xptr;
+        for (int idx = 0; idx < 4; idx++) {
+            mvwprintw(scr_Restime_Instruct, yptr, xptr_cur, "OPT");
+            mvwprintw(scr_Restime_Instruct, yptr, xptr_cur + 3,
+                      to_string(idx).c_str());
+            mvwprintw(scr_Restime_Instruct, yptr, xptr_cur + 4, " :");
+            for (int i = 0; i < power2; i++) {
+                if (i % sizeOfAnsMatrix == 0) {
+                    yptr++;
+                    xptr = xptr_cur;
+                }
+                mvwprintw(scr_Restime_Instruct, yptr, xptr++, "%d",
+                          opt[idx].at(i));
+            }
+            xptr = 11 + 9 * idx;
+            xptr_cur = xptr;
+            yptr = 2;
+        }
+        wrefresh(scr_Restime_Instruct);
+
+        // get input from user
+        wscanw(scr_Restime_usrField, "%d", &userAnswer);
+
+        // CHECK : isWrong?
+        int checher = userAnswer - userAnswer;
+        if (checher == 0) {
+            mvwprintw(scr_Restime_Instruct, 9, 1, "Correct!");
+            refresh();
+            wrefresh(scr_Restime_Instruct);
+        } else {
+            mvwprintw(scr_Restime_Instruct, 9, 1, "Wrong!");
+            refresh();
+            wrefresh(scr_Restime_Instruct);
+            sleep(1);
+
+            life--;
+            mvdelch(1, 4 + life);
+            mvwprintw(scr_Restime_Instruct, 9, 1, to_string(life).c_str());
+            mvwprintw(scr_Restime_Instruct, 9, 2, " ");
+            mvwprintw(scr_Restime_Instruct, 9, 3, "times remaining");
+            wrefresh(scr_Restime_Instruct);
+        }
+        sleep(1);
+        mvwprintw(scr_Restime_usrField, 1, 1, "    ");
+        wrefresh(scr_Restime_usrField);
+
+        move(2, 0);
+        clrtoeol();
+        level++;
+    }
+    mvwprintw(scr_Restime_Instruct, 9, 1, "You Dead!         ");
+    wrefresh(scr_Restime_Instruct);
+    sleep(1);
+
+    erase();
+    delwin(scr_Restime_Instruct);
+    delwin(scr_Restime_usrField);
+    endwin();
 }
 
 void memoryWhatNum(void) {
@@ -278,36 +531,47 @@ void memoryWhatPic(void) {
 
     // variable declare
     unsigned short answerIdx, userAnswer, sizeOfAnsMatrix;
-    std::vector<std::vector<bool> /**/> ansMatrix;
+    unsigned short power2;
+    std::vector<bool> ansMatrix;
+    std::vector<bool> opt[4];
+    std::cout << "Memory Picture: " << std::endl;
 
     while (life > 0) {
-        //  variable Initialze
-        PicToBeMemoried opt[4] = {
-            PicToBeMemoried(level), PicToBeMemoried(level),
-            PicToBeMemoried(level), PicToBeMemoried(level)};
+        //  Matrix options Initialze
+        srand(time(NULL));
+        sizeOfAnsMatrix = getSizeOfMatrix(level);
+        power2 = sizeOfAnsMatrix * sizeOfAnsMatrix;
+        for (int i = 0; i < 4; i++)
+            opt[i].resize(0);
+
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < power2; j++)
+                opt[i].push_back(rand() % 2);
 
         // Select 1 and that will be answer
-        answerIdx = rand() % 3;
-        // ansMatrix = opt[answerIdx]->getAnswer();
-        //   sizeOfAnsMatrix = opt[answerIdx]->getSizeOfMatrix();
+        answerIdx = rand() % 4;
+        ansMatrix = opt[answerIdx];
 
-        // Print picture to be memoried - User should remember this
+        // Print picture to be memoried
+        // User should remember this
         std::cout << "Remember This: " << std::endl;
-        for (int i = 0; i < sizeOfAnsMatrix; i++) {
-            for (int j = 0; j < sizeOfAnsMatrix; j++)
-                std::cout << ansMatrix[i][j];
-            std::cout << std::endl;
+        for (int i = 0; i < power2; i++) {
+            if (i % sizeOfAnsMatrix == 0)
+                std::cout << " ";
+            std::cout << ansMatrix.at(i);
         }
+        std::cout << std::endl;
 
         // Print other options
         std::cout << "What is the answer? select 1 : " << std::endl;
         for (int idx = 0; idx < 4; idx++) {
-            for (int i = 0; i < sizeOfAnsMatrix; i++) {
-                for (int j = 0; j < sizeOfAnsMatrix; j++)
-                    //                   std::cout <<
-                    //                   opt[idx]->getAnswer()[i][j];
-                    std::cout << std::endl;
+            std::cout << idx << " :";
+            for (int i = 0; i < power2; i++) {
+                if (i % sizeOfAnsMatrix == 0)
+                    std::cout << " ";
+                std::cout << opt[idx].at(i);
             }
+            std::cout << "\n";
         }
 
         // User's selection

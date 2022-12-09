@@ -12,45 +12,36 @@
 
 using namespace std;
 
-int main(void) {
-    // Randon seed initialize
-    srand(time(NULL));
-
-    std::cout << "Welcome to HUMAN BENCHMARK!" << std::endl;
-    computeTime_ncur();
-
-    while (1) {
-
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
         // PRINT List of the games
-        std::cout << "Choose the game you want to play (q to exit)" << std::endl
+        std::cout << "Usage : " << argv[0] << " [num]" << std::endl;
+        std::cout << "Choose the game you want to play :" << std::endl
                   << "1. Measure your Reaction Time " << std::endl
                   << "2. Calculation time" << std::endl
                   << "3. Memory the number" << std::endl
-                  << "4. Memory the picture" << std::endl
-                  << "Your Choose : ";
-
-        // Get input from user
-        std::cin.ignore();
-        unsigned short selection;
-        std::cin >> selection;
-
-        switch (selection) {
-        case 1:
-            responseTime();
-            break;
-        case 2:
-            computeTime();
-            break;
-        case 3:
-            memoryWhatNum();
-            break;
-        case 4:
-            memoryWhatPic();
-            break;
-        default:
-            break;
-        }
+                  << "4. Memory the picture" << std::endl;
+        exit(-1);
     }
+
+    // Randon seed initialize
+    srand(time(NULL));
+    unsigned short selection = atoi(argv[1]);
+
+    // exception check
+    if (selection < 1 || selection > 4) {
+        std::cout << "WRONG NUM!" << std::endl;
+        exit(-1);
+    }
+
+    if (selection == 1)
+        responseTime();
+    else if (selection == 2)
+        computeTime_ncur();
+    else if (selection == 3)
+        memoryWhatNum_ncur();
+    else if (selection == 4)
+        memoryWhatPic_ncur();
 
     return 0;
 }
