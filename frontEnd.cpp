@@ -199,12 +199,13 @@ void computeTime_ncur(void) {
         wrefresh(scr_Restime_Instruct);
         wrefresh(scr_Restime_usrField);
 
-        // COUNTDOWN Start
+        // COUNTDOWN Start// get input from user
         timeStarted = time(NULL);
-        std::cin >> userAnswer;
+        wscanw(scr_Restime_usrField, "%d", &userAnswer);
 
-        // CHECK : isCorrect?
-        if (answer == userAnswer) {
+        // CHECK : isWrong?
+        int checher = answer - userAnswer;
+        if (checher == 0) {
             timePressed = time(NULL);
             mvwprintw(scr_Restime_Instruct, 3, 1, "Correct!");
             refresh();
@@ -238,7 +239,7 @@ void computeTime_ncur(void) {
         level++;
         delete use;
     }
-    mvwprintw(scr_Restime_Instruct, 3, 1, "You Dead!");
+    mvwprintw(scr_Restime_Instruct, 3, 1, "You Dead!       ");
     wrefresh(scr_Restime_Instruct);
     sleep(1);
 
@@ -358,7 +359,7 @@ void memoryWhatPic_ncur(void) {
 
     // Initialize window
     initscr();
-    WINDOW *scr_Restime_Instruct = newwin(10, 55, 3, 3);
+    WINDOW *scr_Restime_Instruct = newwin(11, 55, 3, 3);
     WINDOW *scr_Restime_usrField = newwin(3, 15, 15, 3);
     mvprintw(0, 0, "You choosed Memory Picture!");
     refresh();

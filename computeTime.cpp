@@ -13,6 +13,11 @@ void ToBeComputed::myinit(unsigned int level) {
     operation = deterOperation();
     operand1 = deterOperand();
     operand2 = deterOperand();
+    if (operand1 < operand2) {
+        unsigned long temp = operand1;
+        operand1 = operand2;
+        operand2 = temp;
+    }
     answer = computeAnswer();
 }
 
@@ -56,19 +61,23 @@ unsigned long ToBeComputed::deterOperand(void) {
     switch (this->operation) {
     case 0: //+
     case 1: //-
-        if (this->level < 5)
+        if (this->level < 4)
             retVal = 1 + retVal % 9;
-        else if (this->level < 11)
-            retVal = 1 + retVal % 30;
+        else if (this->level < 7)
+            retVal = 9 + retVal % 20;
+        else if (this->level < 10)
+            retVal = 14 + retVal % 30;
         else
-            retVal = 1 + retVal % 100;
+            retVal = 20 + retVal % 50;
         return retVal;
         break;
     case 2: //*
-        if (this->level < 8)
+        if (this->level < 4)
             retVal = retVal % 10;
+        else if (this->level < 8)
+            retVal = 4 + retVal % 10;
         else
-            retVal = 1 + retVal % 12;
+            retVal = 8 + retVal % 6;
         return retVal;
         break;
     default:

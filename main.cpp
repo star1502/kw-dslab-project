@@ -17,10 +17,10 @@ int main(int argc, char *argv[]) {
         // PRINT List of the games
         std::cout << "Usage : " << argv[0] << " [num]" << std::endl;
         std::cout << "Choose the game you want to play :" << std::endl
-                  << "1. Measure your Reaction Time " << std::endl
-                  << "2. Calculation time" << std::endl
-                  << "3. Memory the number" << std::endl
-                  << "4. Memory the picture" << std::endl;
+                  << "1. React Fast " << std::endl
+                  << "2. Do Calculate Fast " << std::endl
+                  << "3. Memory the Number" << std::endl
+                  << "4. Memory the Picture" << std::endl;
         exit(-1);
     }
 
