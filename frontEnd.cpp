@@ -29,7 +29,7 @@ void responseTime(void) {
 
     // Doing game
     char selection = '0';
-    while (selection == 'N') {
+    do {
         wclear(scr_Restime_Instruct);
         wclear(scr_Restime_usrRsltPrint);
         box(scr_Restime_Instruct, 0, 0);     // added for easy viewing
@@ -44,7 +44,8 @@ void responseTime(void) {
             std::cin.clear();
 
             // READY
-            mvwprintw(scr_Restime_Instruct, 1, 1, "Ready...");
+            mvwprintw(scr_Restime_Instruct, 1, 1,
+                      "Ready...                              ");
             mvwprintw(scr_Restime_usrRsltPrint, 1 + i, 1, "Loop ");
             mvwprintw(scr_Restime_usrRsltPrint, 1 + i, 6,
                       to_string(i + 1).c_str());
@@ -55,7 +56,8 @@ void responseTime(void) {
             usleep(waitHowMuchTime()); // WAIT
 
             // SINCE Start -> UNTIL Pressed Key
-            mvwprintw(scr_Restime_Instruct, 1, 1, "PRESS ANY KEY!");
+            mvwprintw(scr_Restime_Instruct, 1, 1,
+                      "PRESS ANY KEY!                    ");
             move(1, 0);
             wrefresh(scr_Restime_Instruct);
             timeStarted = clock();
@@ -84,7 +86,12 @@ void responseTime(void) {
         wrefresh(scr_Restime_Instruct);
         std::cin >> selection;
         std::toupper(selection);
-    } // Doing game
+    } while (selection == 'N'); // Doing game
+
+    erase();
+    delwin(scr_Restime_Instruct);
+    delwin(scr_Restime_usrRsltPrint);
+    endwin();
 }
 void computeTime(void) {
     int life = 3; // Allow user to be wrong UP TO 3 TIMES
@@ -352,7 +359,7 @@ void memoryWhatPic_ncur(void) {
     unsigned int level = 1;
 
     // variable declare
-    short answerIdx, userAnswer, sizeOfAnsMatrix;
+    short userAnswer, sizeOfAnsMatrix;
     short power2;
     std::vector<short> ansMatrix;
     std::vector<short> opt[4];
@@ -368,7 +375,7 @@ void memoryWhatPic_ncur(void) {
     mvprintw(1, 0, "L : ");
     mvprintw(1, 4, "***");
 
-    while (life > 0) {
+    for (level = 1; life > 0; level = level + 3) {
         // Window setting
         wclear(scr_Restime_Instruct);
         wclear(scr_Restime_usrField);
@@ -395,7 +402,7 @@ void memoryWhatPic_ncur(void) {
                 opt[i].push_back(rand() % 2);
 
         // Select 1 and that will be answer
-        answerIdx = rand() % 4;
+        const short answerIdx = rand() % 4;
         ansMatrix = opt[answerIdx];
 
         // Ready
@@ -457,7 +464,7 @@ void memoryWhatPic_ncur(void) {
         wscanw(scr_Restime_usrField, "%d", &userAnswer);
 
         // CHECK : isWrong?
-        int checher = userAnswer - userAnswer;
+        int checher = answerIdx - userAnswer;
         if (checher == 0) {
             mvwprintw(scr_Restime_Instruct, 9, 1, "Correct!");
             refresh();
@@ -467,7 +474,6 @@ void memoryWhatPic_ncur(void) {
             refresh();
             wrefresh(scr_Restime_Instruct);
             sleep(1);
-
             life--;
             mvdelch(1, 4 + life);
             mvwprintw(scr_Restime_Instruct, 9, 1, to_string(life).c_str());
@@ -481,7 +487,7 @@ void memoryWhatPic_ncur(void) {
 
         move(2, 0);
         clrtoeol();
-        level++;
+        refresh();
     }
     mvwprintw(scr_Restime_Instruct, 9, 1, "You Dead!         ");
     wrefresh(scr_Restime_Instruct);

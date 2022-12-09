@@ -34,7 +34,9 @@ int main(int argc, char *argv[]) {
         exit(-1);
     }
 
-    if (selection == 1)
+    if (argc != 2) {
+
+    } else if (selection == 1)
         responseTime();
     else if (selection == 2)
         computeTime_ncur();

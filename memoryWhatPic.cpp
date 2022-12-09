@@ -80,15 +80,14 @@ unsigned short getSizeOfMatrix(unsigned int level) {
     switch (level) {
     case 1:
     case 2:
-    case 3:
         sizeOfMatrix = 3;
         break;
+    case 3:
     case 4:
-    case 5:
         sizeOfMatrix = 4;
         break;
+    case 5:
     case 6:
-    case 7:
         sizeOfMatrix = 5;
         break;
     default:
@@ -105,15 +104,14 @@ std::vector<bool> getOption(unsigned int level) {
     switch (level) {
     case 1:
     case 2:
-    case 3:
         sizeOfMatrix = 3;
         break;
+    case 3:
     case 4:
-    case 5:
         sizeOfMatrix = 4;
         break;
+    case 5:
     case 6:
-    case 7:
         sizeOfMatrix = 5;
         break;
     default:
