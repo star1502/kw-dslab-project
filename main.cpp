@@ -12,36 +12,27 @@
 
 using namespace std;
 
-void mySigHandler(int signum) {
-    char selection = '0';
-    cout << "Do you want to Quit? (y or n)" << endl << "Choose -> ";
-    cin >> selection;
-    toupper(selection);
-
-    if (selection == 'Y') {
-        return;
-    } else
-        exit(0);
-}
-
 int main(void) {
-    // Redefine SIGINT handler
-    if (signal(SIGINT, mySigHandler) == SIG_ERR) {
-        perror("FAILED to Redefine SIGINT handler");
-    }
+    // Randon seed initialize
+    srand(time(NULL));
 
-    cout << "welcome to game! " << endl;
+    std::cout << "Welcome to HUMAN BENCHMARK!" << std::endl;
+    computeTime_ncur();
+
     while (1) {
-        cout << "Choose the game you want to play" << endl
-             << "1. Reaction Time " << endl
-             << "2. Calculation time" << endl
-             << "3. Memory the number " << endl
-             << "4. Memory the picture" << endl
-             << "Choose -> ";
 
-        unsigned short selection = -0;
-        cout << "<< select: ";
-        cin >> selection;
+        // PRINT List of the games
+        std::cout << "Choose the game you want to play (q to exit)" << std::endl
+                  << "1. Measure your Reaction Time " << std::endl
+                  << "2. Calculation time" << std::endl
+                  << "3. Memory the number" << std::endl
+                  << "4. Memory the picture" << std::endl
+                  << "Your Choose : ";
+
+        // Get input from user
+        std::cin.ignore();
+        unsigned short selection;
+        std::cin >> selection;
 
         switch (selection) {
         case 1:
@@ -57,7 +48,6 @@ int main(void) {
             memoryWhatPic();
             break;
         default:
-            cout << "Wrong Selection! " << endl;
             break;
         }
     }
